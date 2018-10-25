@@ -22,11 +22,11 @@ class Graph:
 test = Graph(7)
 test.add_node(1, 3, 1)
 test.add_node(1, 4, 1)
-test.add_node(4, 7, 1)
-test.add_node(3, 7, 2)
+test.add_node(4, 6, 1)
+test.add_node(3, 6, 2)
 test.add_node(0, 3, 2)
-test.add_node(3, 7, 1)
-test.add_node(0, 7, 4)
+test.add_node(3, 6, 1)
+test.add_node(0, 6, 4)
 
 
 test.print_graph()
