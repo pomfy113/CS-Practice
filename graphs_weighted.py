@@ -1,112 +1,121 @@
 from collections import deque
-class Node:
+class Vertex:
     def __init__(self, data):
         self.data = data
-        self.adjacent = {}
+        self.adjacent = {} # TODO: Change key node ID to other node, Value: Weight
+
     def __repr__(self):
-        return '<Node {}>'.format(self.data)
+        return '<Vertex {}>'.format(self.data)
+
     def __str__(self):
-        return '<Node {}>'.format(self.data)
+        return '<Vertex {}>'.format(self.data)
 
 class Graph:
     def __init__(self, size):
+        # TODO: References to nodes
         self.size = size
-        self.nodes = [Node(i) for i in range(size)]
+        self.vertices = {i:Vertex(i) for i in range(size)}
 
     # Assume 1 weight
-    def add_node(self, from_node, to_node, weight=1):
-        next_node = self.nodes[to_node]
-        self.nodes[from_node].adjacent[next_node] = weight
+    def add_vertex(self, source, dest, weight=1):
+        self.vertices[source].adjacent[dest] = weight
 
     def print_graph(self):
-        for node in self.nodes:
-            print("Current node:", node.data)
-            print("Adjacents:", node.adjacent)
-
-            print("\n")
+        print(self.vertices)
+        for id, vertex in self.vertices.items():
+            print("Current node:", id)
+            print("Adjacents:", vertex.adjacent)
 
     def depth_first(self, start):
         # Visited list, along with a stack
         visited = [None] * self.size
-        node_stack = []
-        nodes = []
+        v_stack = []
+        v_print = []
 
         # Initializing
-        node = self.nodes[start]
+        vertex = self.vertices[start]
         visited[start] = True
-        nodes.append(node.data)
+        v_print.append(vertex.data)
 
         # Append links to other nodes
-        for item in node.adjacent:
-            node_stack.append(item)
+        for id, weight in vertex.adjacent.items():
+            adjacent = self.vertices[id]
+            v_stack.append(adjacent)
 
         # Main while loop; keep popping the stack
         # The stack makes us go deep before exploring the rest
-        while len(node_stack) > 0:
-            node = node_stack.pop()
+        while len(v_stack) > 0:
+            vertex = v_stack.pop()
 
             # If not visited, then we put it into the node print
-            if visited[node.data] is not True:
-                visited[node.data] = True
-                for item in node.adjacent:
-                    node_stack.append(item)
-                nodes.append(node.data)
-        print(nodes)
+            if visited[vertex.data] is not True:
+                visited[vertex.data] = True
+                for id, weight in vertex.adjacent.items():
+                    adjacent = self.vertices[id]
+                    v_stack.append(adjacent)
+                v_print.append(vertex.data)
+        print(v_print)
 
-    def depth_first_recursive(self, node, visited=None):
+    def depth_first_recursive(self, id, visited=None):
         if visited is None:
             visited = [None] * self.size
-            node = self.nodes[node]
-            print(node.data)
-
-        visited[node.data] = True
-        for node in node.adjacent:
-            if visited[node.data] is not True:
-                print(node.data)
-                self.depth_first_recursive(node, visited)
+            print(id)
+        visited[id] = True
+        vertex = self.vertices[id]
+        for id, weight in vertex.adjacent.items():
+            if visited[id] is not True:
+                print(id)
+                self.depth_first_recursive(id, visited)
 
     def breadth_first(self, start):
+        # Visited list, along with a stack
         visited = [None] * self.size
-        node_stack = deque()
-        nodes = []
+        v_queue = deque()
+        v_print = []
 
-        node = self.nodes[start]
+        # Initializing
+        vertex = self.vertices[start]
         visited[start] = True
-        nodes.append(node.data)
+        v_print.append(vertex.data)
 
+        # Append links to other nodes
+        for id, weight in vertex.adjacent.items():
+            adjacent = self.vertices[id]
+            v_queue.append(adjacent)
 
-        for item in node.adjacent:
-            node_stack.append(item)
+        # Main while loop; keep popping the stack
+        # The stack makes us go deep before exploring the rest
+        while len(v_queue) > 0:
+            vertex = v_queue.popleft()
 
-        while len(node_stack) > 0:
-            node = node_stack.popleft()
+            # If not visited, then we put it into the node print
+            if visited[vertex.data] is not True:
+                visited[vertex.data] = True
+                for id, weight in vertex.adjacent.items():
+                    adjacent = self.vertices[id]
+                    v_queue.append(adjacent)
+                v_print.append(vertex.data)
+        print(v_print)
 
-            if visited[node.data] is not True:
-                visited[node.data] = True
-                for item in node.adjacent:
-                    node_stack.append(item)
-                nodes.append(node.data)
-        print(nodes)
-        return nodes
 
 if __name__ == "__main__":
     g = Graph(6)
-    g.add_node(0, 1)
-    g.add_node(0, 2)
-    g.add_node(0, 3)
-    g.add_node(0, 4)
-    g.add_node(0, 5)
+    g.add_vertex(0, 1)
+    g.add_vertex(0, 2)
+    g.add_vertex(0, 3)
+    g.add_vertex(0, 4)
+    g.add_vertex(0, 5)
 
-    g.add_node(1, 2)
-    g.add_node(2, 0)
-    g.add_node(2, 3)
-    g.add_node(3, 3)
-    g.add_node(3, 4)
-    g.add_node(4, 5)
+    g.add_vertex(1, 2)
+    g.add_vertex(2, 0)
+    g.add_vertex(2, 3)
+    g.add_vertex(3, 3)
+    g.add_vertex(3, 4)
+    g.add_vertex(4, 5)
 
-    print(g.nodes)
+    # print(g.nodes)
     g.print_graph()
-    print("First, depth first. We should see 2, followed by 3->4->5, then 0->1 since that's left")
+    print("\nFirst, depth first. We should see 2, followed by 3->4->5, then 0->1 since that's left")
     g.depth_first(2)
     print("Then breadth first. We should see 2 which has 0 and 3 since those are immediate adjacents, then go through 1, 4, 5.")
     g.breadth_first(2)
@@ -117,10 +126,10 @@ if __name__ == "__main__":
 
 
 
-# test.add_node(0, 1, 1)
-# test.add_node(1, 4, 1)
-# test.add_node(4, 6, 1)
-# test.add_node(3, 6, 2)
-# test.add_node(0, 3, 2)
-# test.add_node(3, 6, 1)
-# test.add_node(0, 6, 4)
+# test.add_vertex(0, 1, 1)
+# test.add_vertex(1, 4, 1)
+# test.add_vertex(4, 6, 1)
+# test.add_vertex(3, 6, 2)
+# test.add_vertex(0, 3, 2)
+# test.add_vertex(3, 6, 1)
+# test.add_vertex(0, 6, 4)
