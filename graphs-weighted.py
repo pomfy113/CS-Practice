@@ -1,15 +1,20 @@
-
+from collections import deque
 class Node:
     def __init__(self, data):
         self.data = data
         self.adjacent = {}
+    def __repr__(self):
+        return '<Node - {}>'.format(self.data)
 
 class Graph:
     def __init__(self, size):
+        self.size = size
         self.nodes = [Node(i) for i in range(size)]
 
-    def add_node(self, from_node, to_node, weight):
-        self.nodes[from_node].adjacent[to_node] = weight
+    # Assume 1 weight
+    def add_node(self, from_node, to_node, weight=1):
+        next_node = self.nodes[to_node]
+        self.nodes[from_node].adjacent[next_node] = weight
 
     def print_graph(self):
         for node in self.nodes:
@@ -18,15 +23,46 @@ class Graph:
 
             print("\n")
 
+    def depth_first(self, start):
+        visited = [None] * self.size
+        visited[start] = True
+        node_stack = deque()
 
-test = Graph(7)
-test.add_node(1, 3, 1)
-test.add_node(1, 4, 1)
-test.add_node(4, 6, 1)
-test.add_node(3, 6, 2)
-test.add_node(0, 3, 2)
-test.add_node(3, 6, 1)
-test.add_node(0, 6, 4)
+        node = self.nodes[start]
+        print(node.data)
+        for item in node.adjacent:
+            node_stack.append(item)
+
+        while len(node_stack) > 0:
+            node = node_stack.pop()
+
+            if visited[node.data] is not True:
+                visited[node.data] = True
+                for item in node.adjacent:
+                    node_stack.append(item)
+                print(node.data)
+
+    # def stack_helper(self, adjacent):
+    #     # for item in adjacent:
+if __name__ == "__main__":
+    g = Graph(6)
+    g.add_node(0, 1)
+    g.add_node(0, 2)
+    g.add_node(1, 2)
+    g.add_node(2, 0)
+    g.add_node(2, 3)
+    g.add_node(3, 3)
+    g.add_node(3, 4)
+    g.add_node(4, 5)
 
 
-test.print_graph()
+    g.print_graph()
+    g.depth_first(0)
+
+# test.add_node(0, 1, 1)
+# test.add_node(1, 4, 1)
+# test.add_node(4, 6, 1)
+# test.add_node(3, 6, 2)
+# test.add_node(0, 3, 2)
+# test.add_node(3, 6, 1)
+# test.add_node(0, 6, 4)
