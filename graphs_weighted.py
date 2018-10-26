@@ -4,7 +4,9 @@ class Node:
         self.data = data
         self.adjacent = {}
     def __repr__(self):
-        return '<Node - {}>'.format(self.data)
+        return '<Node {}>'.format(self.data)
+    def __str__(self):
+        return '<Node {}>'.format(self.data)
 
 class Graph:
     def __init__(self, size):
@@ -42,8 +44,6 @@ class Graph:
                     node_stack.append(item)
                 print(node.data)
 
-    # def stack_helper(self, adjacent):
-    #     # for item in adjacent:
 if __name__ == "__main__":
     g = Graph(6)
     g.add_node(0, 1)
@@ -55,7 +55,7 @@ if __name__ == "__main__":
     g.add_node(3, 4)
     g.add_node(4, 5)
 
-
+    print(g.nodes)
     g.print_graph()
     g.depth_first(0)
 
