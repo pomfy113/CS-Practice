@@ -11,13 +11,15 @@ class Vertex:
         return '<Vertex {}>'.format(self.data)
 
 class Graph:
-    def __init__(self, size):
+    def __init__(self):
         # TODO: References to nodes
-        self.size = size
-        self.vertices = {i:Vertex(i) for i in range(size)}
+        self.vertices = {}
 
     # Assume 1 weight
-    def add_vertex(self, source, dest, weight=1):
+    def add_vertex(self, loc):
+        self.vertices[loc] = Vertex(loc)
+
+    def add_edge(self, source, dest, weight=1):
         self.vertices[source].adjacent[dest] = weight
 
     def print_graph(self):
@@ -28,38 +30,34 @@ class Graph:
 
     def depth_first(self, start):
         # Visited list, along with a stack
-        visited = [None] * self.size
+        visited = [None] * len(self.vertices)
         v_stack = []
         v_print = []
 
-        # Initializing
-        vertex = self.vertices[start]
-        visited[start] = True
-        v_print.append(vertex.data)
-
-        # Append links to other nodes
-        for id, weight in vertex.adjacent.items():
-            adjacent = self.vertices[id]
-            v_stack.append(adjacent)
+        # Initialize
+        # Originally, this was actually using pointers
+        v_stack.append(start)
 
         # Main while loop; keep popping the stack
         # The stack makes us go deep before exploring the rest
         while len(v_stack) > 0:
-            vertex = v_stack.pop()
-
+            loc = v_stack.pop()
             # If not visited, then we put it into the node print
-            if visited[vertex.data] is not True:
-                visited[vertex.data] = True
-                for id, weight in vertex.adjacent.items():
-                    adjacent = self.vertices[id]
-                    v_stack.append(adjacent)
-                v_print.append(vertex.data)
+            # NOW we should access for adjacencies
+            print(loc, visited)
+            if visited[loc] is not True:
+                visited[loc] = True
+                vertex = self.vertices[loc]
+                for id, _ in vertex.adjacent.items():
+                    v_stack.append(id)
+                v_print.append(loc)
         print(v_print)
 
     def depth_first_recursive(self, id, visited=None):
         if visited is None:
-            visited = [None] * self.size
+            visited = [None] * len(self.vertices)
             print(id)
+
         visited[id] = True
         vertex = self.vertices[id]
         for id, weight in vertex.adjacent.items():
@@ -69,49 +67,40 @@ class Graph:
 
     def breadth_first(self, start):
         # Visited list, along with a stack
-        visited = [None] * self.size
+        visited = [None] * len(self.vertices)
         v_queue = deque()
         v_print = []
 
-        # Initializing
-        vertex = self.vertices[start]
-        visited[start] = True
-        v_print.append(vertex.data)
-
-        # Append links to other nodes
-        for id, weight in vertex.adjacent.items():
-            adjacent = self.vertices[id]
-            v_queue.append(adjacent)
-
+        v_queue.append(start)
         # Main while loop; keep popping the stack
-        # The stack makes us go deep before exploring the rest
-        while len(v_queue) > 0:
-            vertex = v_queue.popleft()
-
+        while v_queue:
+            loc = v_queue.popleft()
             # If not visited, then we put it into the node print
-            if visited[vertex.data] is not True:
-                visited[vertex.data] = True
-                for id, weight in vertex.adjacent.items():
-                    adjacent = self.vertices[id]
-                    v_queue.append(adjacent)
-                v_print.append(vertex.data)
+            if visited[loc] is not True:
+                visited[loc] = True
+                vertex = self.vertices[loc]
+                for id, _ in vertex.adjacent.items():
+                    v_queue.append(id)
+                v_print.append(loc)
         print(v_print)
 
 
 if __name__ == "__main__":
-    g = Graph(6)
-    g.add_vertex(0, 1)
-    g.add_vertex(0, 2)
-    g.add_vertex(0, 3)
-    g.add_vertex(0, 4)
-    g.add_vertex(0, 5)
+    g = Graph()
+    for i in range(6):
+        g.add_vertex(i)
+    g.add_edge(0, 1)
+    g.add_edge(0, 2)
+    g.add_edge(0, 3)
+    g.add_edge(0, 4)
+    g.add_edge(0, 5)
 
-    g.add_vertex(1, 2)
-    g.add_vertex(2, 0)
-    g.add_vertex(2, 3)
-    g.add_vertex(3, 3)
-    g.add_vertex(3, 4)
-    g.add_vertex(4, 5)
+    g.add_edge(1, 2)
+    g.add_edge(2, 0)
+    g.add_edge(2, 3)
+    g.add_edge(3, 3)
+    g.add_edge(3, 4)
+    g.add_edge(4, 5)
 
     # print(g.nodes)
     g.print_graph()
@@ -126,10 +115,10 @@ if __name__ == "__main__":
 
 
 
-# test.add_vertex(0, 1, 1)
-# test.add_vertex(1, 4, 1)
-# test.add_vertex(4, 6, 1)
-# test.add_vertex(3, 6, 2)
-# test.add_vertex(0, 3, 2)
-# test.add_vertex(3, 6, 1)
-# test.add_vertex(0, 6, 4)
+# test.add_edge(0, 1, 1)
+# test.add_edge(1, 4, 1)
+# test.add_edge(4, 6, 1)
+# test.add_edge(3, 6, 2)
+# test.add_edge(0, 3, 2)
+# test.add_edge(3, 6, 1)
+# test.add_edge(0, 6, 4)
