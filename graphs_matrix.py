@@ -2,7 +2,8 @@ from collections import deque
 
 class Vertex:
     def __init__(self, data):
-        self.data = data
+        self.loc = data
+        self.on = True
 
     def __repr__(self):
         return '<Vertex: {}>'.format(self.data)
@@ -26,30 +27,18 @@ class Graph:
         self.vertices.append([0 for i in range(self.size)])
         self.vertices[loc][loc] = 1
 
-        self.vertices_ids[id] = loc
+        self.vertices_ids[id] = Vertex(loc)
 
 
     def add_edge(self, source, dest):
-        self.vertices[source][dest] = 1;
-        self.vertices[dest][source] = 1
+        self.vertices[source][dest] = 1
 
     def remove_vertex(self, id):
-        target_index = self.vertices_ids[id]
-        last_index = self.size - 1
-
-        print("Removing {}".format(id))
-
-        self.vertices[target_index], self.vertices[last_index] = self.vertices[last_index], self.vertices[target_index]
-        print("= = = Testing = = =")
-        self.print_graph()
-        print("= = = Testing Complete = = =")
-
-        self.vertices.pop()
+        index = self.vertices_ids[id].loc
+        self.vertices_ids[id].on = False
 
         for row in self.vertices:
-            row[target_index] = row[last_index]
-            row.pop()
-
+            row[index] = 0
 
     def remove_edge(self, source, dest):
         self.vertices[source].adjacent.pop(dest)
@@ -74,8 +63,8 @@ if __name__ == "__main__":
 
     g.print_graph()
 
-    print(g.vertices_ids)
-    g.remove_vertex("ID-3")
+    # print(g.vertices_ids)
+    g.remove_vertex("ID-5")
     g.print_graph()
 
 
