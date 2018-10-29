@@ -5,10 +5,10 @@ class Vertex:
         self.adjacent = {} # TODO: Change key node ID to other node, Value: Weight
 
     def __repr__(self):
-        return '<Vertex {}>'.format(self.data)
+        return '<Vertex: {}>'.format(self.data)
 
     def __str__(self):
-        return '<Vertex {}>'.format(self.data)
+        return '<Vertex: {}>'.format(self.data)
 
 # This is directed
 class Graph:
@@ -17,8 +17,8 @@ class Graph:
         self.vertices = {}
 
     # Assume 1 weight
-    def add_vertex(self, loc):
-        self.vertices[loc] = Vertex(loc)
+    def add_vertex(self, loc, value):
+        self.vertices[loc] = Vertex(value)
 
     def add_edge(self, source, dest, weight=1):
         self.vertices[source].adjacent[dest] = weight
@@ -98,7 +98,7 @@ class Graph:
 if __name__ == "__main__":
     g = Graph()
     for i in range(6):
-        g.add_vertex(i)
+        g.add_vertex(i, "Value here {}".format(i))
     g.add_edge(0, 1)
     g.add_edge(0, 2)
     g.add_edge(0, 3)
@@ -114,24 +114,24 @@ if __name__ == "__main__":
 
 
 
+
+
+
+    print("\nFirst, depth first. We should see 2, followed by 3->4->5, then 0->1 since that's left")
+    g.depth_first(2)
+    print("Then breadth first. We should see 2 which has 0 and 3 since those are immediate adjacents, then go through 1, 4, 5.")
+    g.breadth_first(2)
+    print("If we start with 0, we go through all of them in order since 0 is adjacent to all")
+    g.breadth_first(0)
+
+    g.depth_first_recursive(2)
+
     # print(g.nodes)
     g.print_graph()
-    g.remove_edge(4, 5)
+    # g.remove_edge(4, 5)
     g.print_graph()
-    g.remove_vertex(1)
+    # g.remove_vertex(1)
     g.print_graph()
-
-
-    # print("\nFirst, depth first. We should see 2, followed by 3->4->5, then 0->1 since that's left")
-    # g.depth_first(2)
-    # print("Then breadth first. We should see 2 which has 0 and 3 since those are immediate adjacents, then go through 1, 4, 5.")
-    # g.breadth_first(2)
-    # print("If we start with 0, we go through all of them in order since 0 is adjacent to all")
-    # g.breadth_first(0)
-    #
-    # g.depth_first_recursive(2)
-
-
 
 # test.add_edge(0, 1, 1)
 # test.add_edge(1, 4, 1)
