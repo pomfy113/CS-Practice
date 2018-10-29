@@ -13,7 +13,7 @@ class Vertex:
 # This is directed
 class Graph:
     def __init__(self):
-        # TODO: References to nodes
+        # References to nodes, id - reference
         self.vertices = {}
 
     # Assume 1 weight
@@ -22,6 +22,12 @@ class Graph:
 
     def add_edge(self, source, dest, weight=1):
         self.vertices[source].adjacent[dest] = weight
+
+    def remove_vertex(self, vertex):
+        self.vertices.pop(vertex)
+        for _, value in self.vertices.items():
+            if vertex in value.adjacent:
+                value.adjacent.pop(vertex)
 
     def remove_edge(self, source, dest):
         self.vertices[source].adjacent.pop(dest)
@@ -112,6 +118,9 @@ if __name__ == "__main__":
     g.print_graph()
     g.remove_edge(4, 5)
     g.print_graph()
+    g.remove_vertex(1)
+    g.print_graph()
+
 
     # print("\nFirst, depth first. We should see 2, followed by 3->4->5, then 0->1 since that's left")
     # g.depth_first(2)
