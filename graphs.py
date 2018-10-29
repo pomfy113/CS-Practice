@@ -9,7 +9,6 @@ class AdjNode:
         self.vertex = data
         self.next = None
 
-
 # A class to represent a graph. A graph
 # is the list of the adjacency lists.
 # Size of the array will be the no. of the

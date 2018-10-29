@@ -10,6 +10,7 @@ class Vertex:
     def __str__(self):
         return '<Vertex {}>'.format(self.data)
 
+# This is directed
 class Graph:
     def __init__(self):
         # TODO: References to nodes
@@ -21,6 +22,9 @@ class Graph:
 
     def add_edge(self, source, dest, weight=1):
         self.vertices[source].adjacent[dest] = weight
+
+    def remove_edge(self, source, dest):
+        self.vertices[source].adjacent.pop(dest)
 
     def print_graph(self):
         print(self.vertices)
@@ -102,16 +106,21 @@ if __name__ == "__main__":
     g.add_edge(3, 4)
     g.add_edge(4, 5)
 
+
+
     # print(g.nodes)
     g.print_graph()
-    print("\nFirst, depth first. We should see 2, followed by 3->4->5, then 0->1 since that's left")
-    g.depth_first(2)
-    print("Then breadth first. We should see 2 which has 0 and 3 since those are immediate adjacents, then go through 1, 4, 5.")
-    g.breadth_first(2)
-    print("If we start with 0, we go through all of them in order since 0 is adjacent to all")
-    g.breadth_first(0)
+    g.remove_edge(4, 5)
+    g.print_graph()
 
-    g.depth_first_recursive(2)
+    # print("\nFirst, depth first. We should see 2, followed by 3->4->5, then 0->1 since that's left")
+    # g.depth_first(2)
+    # print("Then breadth first. We should see 2 which has 0 and 3 since those are immediate adjacents, then go through 1, 4, 5.")
+    # g.breadth_first(2)
+    # print("If we start with 0, we go through all of them in order since 0 is adjacent to all")
+    # g.breadth_first(0)
+    #
+    # g.depth_first_recursive(2)
 
 
 
