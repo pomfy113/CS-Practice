@@ -128,9 +128,11 @@ if __name__ == "__main__":
 
     # print(g.nodes)
     g.print_graph()
-    # g.remove_edge(4, 5)
+    g.remove_edge(4, 5)
+    print("\nRemoved, 4-5")
     g.print_graph()
-    # g.remove_vertex(1)
+    print("\nRemoved, vertex 1")
+    g.remove_vertex(1)
     g.print_graph()
 
 # test.add_edge(0, 1, 1)
