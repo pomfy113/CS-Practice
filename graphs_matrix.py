@@ -40,7 +40,7 @@ class Graph:
             row[index] = 0
 
     def remove_edge(self, source, dest):
-        self.vertices[source].adjacent.pop(dest)
+        self.vertices[source][dest] = 0
 
     def print_graph(self):
         print("\nPrinting graph - Matrix")
@@ -59,7 +59,6 @@ class Graph:
         while len(stack) > 0:
             vertex = stack.pop()
             found.append(vertex)
-            print(vertex)
 
             if vertex == search:
                 print("Items found:", found)
@@ -129,6 +128,9 @@ if __name__ == "__main__":
     print(g.dfs(1, 3))
     print(g.bfs(1, 3))
 
+    g.print_graph()
+    g.remove_edge(0,2)
+    g.print_graph()
 
 
     # g.add_edge(0, 3)

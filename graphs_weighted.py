@@ -38,11 +38,11 @@ class Graph:
             print("Current node:", id)
             print("Adjacents:", vertex.adjacent)
 
-    def depth_first(self, start):
+    def depth_first(self, start, search):
         # Visited list, along with a stack
         visited = [None] * len(self.vertices)
         v_stack = []
-        v_print = []
+        found = []
 
         # Initialize
         # Originally, this was actually using pointers
@@ -52,47 +52,58 @@ class Graph:
         # The stack makes us go deep before exploring the rest
         while len(v_stack) > 0:
             loc = v_stack.pop()
+
+            if loc == search:
+                print("Previous items found:", found)
+                return("Found {}!".format(search))
             # If not visited, then we put it into the node print
             # NOW we should access for adjacencies
-            print(loc, visited)
             if visited[loc] is not True:
                 visited[loc] = True
                 vertex = self.vertices[loc]
                 for id, _ in vertex.adjacent.items():
                     v_stack.append(id)
-                v_print.append(loc)
-        print(v_print)
+                found.append(loc)
 
-    def depth_first_recursive(self, id, visited=None):
+
+    def depth_first_recursive(self, vertex, search, visited=None):
         if visited is None:
             visited = [None] * len(self.vertices)
-            print(id)
+            print(vertex)
 
-        visited[id] = True
-        vertex = self.vertices[id]
+        if vertex == search:
+            return("Found {}!".format(search))
+
+        visited[vertex] = True
+        vertex = self.vertices[vertex]
+
         for id, weight in vertex.adjacent.items():
             if visited[id] is not True:
                 print(id)
-                self.depth_first_recursive(id, visited)
+                self.depth_first_recursive(id, search, visited)
 
-    def breadth_first(self, start):
+    def breadth_first(self, start, search):
         # Visited list, along with a stack
         visited = [None] * len(self.vertices)
         v_queue = deque()
-        v_print = []
+        found = []
 
         v_queue.append(start)
         # Main while loop; keep popping the stack
         while v_queue:
             loc = v_queue.popleft()
+
+            if loc == search:
+                print("Previous items found:", found)
+                return("Found {}!".format(search))
+
             # If not visited, then we put it into the node print
             if visited[loc] is not True:
                 visited[loc] = True
                 vertex = self.vertices[loc]
                 for id, _ in vertex.adjacent.items():
                     v_queue.append(id)
-                v_print.append(loc)
-        print(v_print)
+                found.append(loc)
 
 
 if __name__ == "__main__":
@@ -118,13 +129,13 @@ if __name__ == "__main__":
 
 
     print("\nFirst, depth first. We should see 2, followed by 3->4->5, then 0->1 since that's left")
-    g.depth_first(2)
+    print(g.depth_first(2, 5))
     print("Then breadth first. We should see 2 which has 0 and 3 since those are immediate adjacents, then go through 1, 4, 5.")
-    g.breadth_first(2)
+    print(g.breadth_first(2, 5))
     print("If we start with 0, we go through all of them in order since 0 is adjacent to all")
-    g.breadth_first(0)
+    print(g.breadth_first(0, 5))
 
-    g.depth_first_recursive(2)
+    g.depth_first_recursive(2, 5)
 
     # print(g.nodes)
     g.print_graph()
