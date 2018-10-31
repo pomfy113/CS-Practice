@@ -45,17 +45,15 @@ class Graph:
         found = []
 
         # Initialize
-        # Originally, this was actually using pointers
         v_stack.append(start)
 
         # Main while loop; keep popping the stack
-        # The stack makes us go deep before exploring the rest
         while len(v_stack) > 0:
             loc = v_stack.pop()
-
+            # Found
             if loc == search:
-                print("Previous items found:", found)
-                return("Found {}!".format(search))
+                return("DFS Iterative - Found {}! Route is: {}!\n".format(search, found))
+
             # If not visited, then we put it into the node print
             # NOW we should access for adjacencies
             if visited[loc] is not True:
@@ -66,21 +64,22 @@ class Graph:
                 found.append(loc)
 
 
-    def depth_first_recursive(self, vertex, search, visited=None):
+    def depth_first_recursive(self, index, search, visited=None, route=[]):
         if visited is None:
             visited = [None] * len(self.vertices)
-            print(vertex)
 
-        if vertex == search:
-            return("Found {}!".format(search))
+        visited[index] = True
+        vertex = self.vertices[index]
+        print(index, vertex, vertex.data)
+        if vertex.data == search:
+            print("Found it")
+            return("DFS Recursive - Found {}! Route is {}\n".format(search, route))
 
-        visited[vertex] = True
-        vertex = self.vertices[vertex]
+        route.append(vertex)
 
         for id, weight in vertex.adjacent.items():
             if visited[id] is not True:
-                print(id)
-                self.depth_first_recursive(id, search, visited)
+                return self.depth_first_recursive(id, search, visited, route)
 
     def breadth_first(self, start, search):
         # Visited list, along with a stack
@@ -94,8 +93,7 @@ class Graph:
             loc = v_queue.popleft()
 
             if loc == search:
-                print("Previous items found:", found)
-                return("Found {}!".format(search))
+                return("BFS - Found {}! Route is: {}!\n".format(search, found))
 
             # If not visited, then we put it into the node print
             if visited[loc] is not True:
@@ -134,8 +132,8 @@ if __name__ == "__main__":
     print(g.breadth_first(2, 5))
     print("If we start with 0, we go through all of them in order since 0 is adjacent to all")
     print(g.breadth_first(0, 5))
-
-    g.depth_first_recursive(2, 5)
+    print("Now let's try depth first, but recursively")
+    print(g.depth_first_recursive(2, 5))
 
     # print(g.nodes)
     g.print_graph()
