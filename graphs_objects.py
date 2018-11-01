@@ -122,10 +122,6 @@ if __name__ == "__main__":
     g.add_edge(4, 5)
 
 
-
-
-
-
     print("\nFirst, depth first. We should see 2, followed by 3->4->5, then 0->1 since that's left")
     print(g.depth_first(2, 5))
     print("Then breadth first. We should see 2 which has 0 and 3 since those are immediate adjacents, then go through 1, 4, 5.")
