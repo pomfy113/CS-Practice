@@ -7,7 +7,7 @@ class Graph:
         self.vertices = {}
 
     # Assume 1 weight
-    def add_vertex(self, loc, value):
+    def add_vertex(self, loc):
         self.vertices[loc] = []
 
     def add_edge(self, source, dest):
@@ -74,11 +74,29 @@ class Graph:
                     if adj not in visited:
                         search_stack.append(adj)
 
+    def cycle_detect(self):
+        for vtx in self.vertices:
+            visited = set([])
+            search_stack = []
+            search_stack.append(vtx)
+
+            while len(search_stack) > 0:
+                index = search_stack.pop()
+
+                if vtx in visited:
+                    print("CYCLE FOUND - {}".format(vtx))
+                    return
+                else:
+                    for adj in self.vertices[index]:
+                        if adj not in visited:
+                            visited.add(adj)
+                            search_stack.append(adj)
+
 
 if __name__ == "__main__":
     g = Graph()
     for i in range(7):
-        g.add_vertex(i, "Value here {}".format(i))
+        g.add_vertex(i)
     g.add_edge(0, 1)
     g.add_edge(0, 2)
     g.add_edge(0, 3)
@@ -102,6 +120,22 @@ if __name__ == "__main__":
     print("= = = Starting bfs = = = ")
 
     g.bfs(2, 3)
+    print("Cycle detection")
+    g.cycle_detect()
+
+    print("Let's try a different once")
+    h = Graph()
+    for i in range(7):
+        h.add_vertex(i)
+    h.add_edge(0, 1)
+    h.add_edge(0, 2)
+    h.add_edge(0, 3)
+    h.add_edge(0, 4)
+    h.add_edge(2, 4)
+    h.add_edge(3, 4)
+    h.add_edge(4, 5)
+
+    h.cycle_detect()
 
 
 
