@@ -8,17 +8,20 @@ class Graph:
 
     # Assume 1 weight
     def add_vertex(self, loc):
-        self.vertices[loc] = []
+        self.vertices[loc] = set()
 
-    def add_edge(self, source, dest):
-        if dest not in self.vertices[source]:
-            self.vertices[source].append(dest)
+    def add_edge(self, src, dest):
+        if src not in self.vertices or dest not in self.vertices:
+            return
+        elif dest not in self.vertices[src]:
+            self.vertices[src].add(dest)
 
     def remove_vertex(self, vertex):
         self.vertices.pop(vertex)
 
     def remove_edge(self, source, dest):
-        self.vertices[source].adjacent.pop(dest)
+        if dest in self.vertices[source]:
+            self.vertices[source].remove(dest)
 
     def print_graph(self):
         print(self.vertices)
@@ -33,12 +36,12 @@ class Graph:
             next = search_stack.pop()
             visited.add(next)
             if next == search:
-                print("Found {}".format(search))
                 return True
             else:
                 for adj in self.vertices[next]:
                     if adj not in visited:
                         search_stack.append(adj)
+        return False
 
     def dfs_recursive(self, vertex, search, visited=None):
         if visited is None:
@@ -47,7 +50,6 @@ class Graph:
         visited.add(vertex)
 
         if vertex == search:
-            print("FOUND {}".format(search))
             return True
 
         for adj in self.vertices[vertex]:
@@ -55,7 +57,9 @@ class Graph:
                 found = self.dfs_recursive(adj, search, visited)
 
                 if found is True:
-                    return
+                    return True
+
+        return False
 
     def bfs(self, start, search):
         visited = set([start])
@@ -67,12 +71,12 @@ class Graph:
             next = search_stack.popleft()
             visited.add(next)
             if next == search:
-                print("Found {}".format(search))
                 return True
             else:
                 for adj in self.vertices[next]:
                     if adj not in visited:
                         search_stack.append(adj)
+        return False
 
     def cycle_detect(self):
         for vtx in self.vertices:
@@ -84,13 +88,13 @@ class Graph:
                 index = search_stack.pop()
 
                 if vtx in visited:
-                    print("CYCLE FOUND - {}".format(vtx))
-                    return
+                    return True
                 else:
                     for adj in self.vertices[index]:
                         if adj not in visited:
                             visited.add(adj)
                             search_stack.append(adj)
+        return False
 
 
 if __name__ == "__main__":
@@ -125,7 +129,7 @@ if __name__ == "__main__":
 
     print("Let's try a different once")
     h = Graph()
-    for i in range(7):
+    for i in range(8):
         h.add_vertex(i)
     h.add_edge(0, 1)
     h.add_edge(0, 2)
@@ -134,8 +138,14 @@ if __name__ == "__main__":
     h.add_edge(2, 4)
     h.add_edge(3, 4)
     h.add_edge(4, 5)
+    # Should not have a cycle
+    print(h.cycle_detect())
 
-    h.cycle_detect()
+    h.add_edge(6, 7)
+    h.add_edge(7, 6)
+
+    # Should have a cycle
+    print(h.cycle_detect())
 
 
 
