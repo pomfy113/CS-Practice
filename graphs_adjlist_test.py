@@ -35,16 +35,22 @@ class RecursionTest(unittest.TestCase):
         assert 2 in g.vertices[1]
         assert 1 in g.vertices[2]
 
-        # 4 does not exist yet; should not change or throw error
-        g.add_edge(1, 4)
+        # 4 does not exist yet; should throw error
+        with self.assertRaises(ValueError):
+            g.add_edge(1, 4)
         assert 2 in g.vertices[1]
         assert 4 not in g.vertices[1]
+
+        # Let's try a nonexistent source
+        with self.assertRaises(ValueError):
+            g.add_edge(5, 4)
 
         # Vtx 1 should now have an extra one
         g.add_vertex(3)
         g.add_edge(1,3)
         assert 2 in g.vertices[1]
         assert 3 in g.vertices[1]
+
     def test_remove(self):
         g = Graph()
         g.add_vertex(1)
@@ -78,7 +84,28 @@ class RecursionTest(unittest.TestCase):
         assert 3 not in g.vertices[2]
         assert 3 not in g.vertices
 
+        # Delete something that doesn't exist,
+        with self.assertRaises(ValueError):
+            g.remove_vertex(6)
 
+        # Let's make 1 not exist
+        g.remove_vertex(1)
+
+        with self.assertRaises(ValueError):
+            g.add_edge(2, 1)
+
+        assert 1 not in g.vertices
+
+        # Adding edges
+        with self.assertRaises(ValueError):
+            g.add_edge(2, 1)
+        with self.assertRaises(ValueError):
+            g.add_edge(1, 2)
+        # Removing edges that can't exist, src and dest
+        with self.assertRaises(ValueError):
+            g.remove_edge(5, 6)
+        with self.assertRaises(ValueError):
+            g.remove_edge(1, 6)
 
     def test_dfs(self):
         g = Graph()
