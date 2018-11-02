@@ -45,9 +45,39 @@ class RecursionTest(unittest.TestCase):
         g.add_edge(1,3)
         assert 2 in g.vertices[1]
         assert 3 in g.vertices[1]
+    def test_remove(self):
+        g = Graph()
+        g.add_vertex(1)
+        g.add_vertex(2)
+        g.add_vertex(3)
+        g.add_edge(1, 2)
+        g.add_edge(1, 3)
 
-        g.remove_edge(1, 3)
+        # Should be removed
+        g.remove_edge(1, 2)
+        assert 2 not in g.vertices[1]
+        assert 3 in g.vertices[1]
+
+        assert 1 not in g.vertices[2]
+        assert 3 not in g.vertices[2]
+
+        assert 1 not in g.vertices[3]
+        assert 2 not in g.vertices[3]
+
+        # Let's reset that and add more things that link to 3
+        g.add_edge(1, 2)
+        g.add_edge(2, 3)
+        assert 3 in g.vertices[1]
+        assert 3 in g.vertices[2]
+
+        # And remove 3
+        g.remove_vertex(3)
+
+        # It should stop existing, even in previous adjacincies
         assert 3 not in g.vertices[1]
+        assert 3 not in g.vertices[2]
+        assert 3 not in g.vertices
+
 
 
     def test_dfs(self):
@@ -58,7 +88,6 @@ class RecursionTest(unittest.TestCase):
         g.add_edge(1,2)
 
         # We should only have 1 to 2 due to it being directed
-        print("Testing", g.vertices[1])
         assert g.dfs(1, 1) is True
         assert g.dfs(1, 2) is True
         assert g.dfs(1, 3) is False
@@ -161,9 +190,17 @@ class RecursionTest(unittest.TestCase):
         g.add_edge(2, 3)
         assert g.cycle_detect() is False
 
+        # move from 3 to 1
+        g.add_edge(3, 1)
+        assert g.cycle_detect() is True
+        g.remove_edge(3, 1)
+
+        # Looping 4 to 4
         g.add_edge(4, 4)
         assert g.cycle_detect() is True
-
+        # Removed 4 to 4
+        g.remove_edge(4, 4)
+        assert g.cycle_detect() is False
 
 if __name__ == '__main__':
     unittest.main()

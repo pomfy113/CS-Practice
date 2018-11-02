@@ -19,9 +19,12 @@ class Graph:
     def remove_vertex(self, vertex):
         self.vertices.pop(vertex)
 
+        # Remoing related adjacencies
+        for vtx in self.vertices:
+            self.vertices[vtx].remove(vertex)
+
     def remove_edge(self, source, dest):
-        if dest in self.vertices[source]:
-            self.vertices[source].remove(dest)
+        self.vertices[source].remove(dest)
 
     def print_graph(self):
         print(self.vertices)
