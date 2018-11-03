@@ -7,11 +7,16 @@ class Graph:
         self.vertices = {}
 
     def add_vertex(self, loc):
-        """Adds a vertex."""
+        """Adds a vertex.
+        Time: O(1), Theta is amount of memory a set is
+        """
         self.vertices[loc] = set()
 
     def add_edge(self, src, dest):
-        """Adds an edge, unless it exists or either vertices don't exist."""
+        """Adds an edge, unless it exists or either vertices don't exist.
+        Time: O(1), it's constant. We're just adding an item into a set
+        Space: O(1), it's just adding a single edge
+        """
 
         if src not in self.vertices:
             raise ValueError("Source vertex not found")
@@ -21,7 +26,10 @@ class Graph:
             self.vertices[src].add(dest)
 
     def remove_vertex(self, vertex):
-        """Removes a vertex and associated adjacencies."""
+        """Removes a vertex and associated adjacencies.
+        Time: O(n), going to have to go through EVERY vertex to remove adjacencies
+            to previously deleted vertex.
+        """
         if vertex not in self.vertices:
             raise ValueError("Vertex not found")
 
@@ -33,7 +41,9 @@ class Graph:
                 self.vertices[item].remove(vertex)
 
     def remove_edge(self, source, dest):
-        """Removes an edge between source and destination vertex."""
+        """Removes an edge between source and destination vertex.
+        Time: O(1), very straightforward
+        """
 
         if source not in self.vertices:
             raise ValueError("Source vertex not found")
@@ -42,11 +52,24 @@ class Graph:
         self.vertices[source].remove(dest)
 
     def print_graph(self):
-        """Prints something."""
+        """Prints something.
+        Time: O(n), must go through every vertex
+        """
         print(self.vertices)
 
     def dfs(self, start, search):
-        """Searches for item iteratively, depth first style."""
+        """Searches for item iteratively, depth first style.
+        Space: O(n); best case, none, worst case 2n
+            Best: We land right on top of the search. Um.
+            Worst: case involves having a place with only neighbors.
+                The stack is going to have all said neighbors before going down
+        Time: O(n), usually; best case is immediate, worst case is n.
+            Worst, if it's the final neighbor, OR, if it's something in order
+                1 -> 2 -> 3 -> 4, looking for 4.
+            Best is landing on it. Barring that, it's the first neighbor we hit.
+        """
+        if start == search:
+            return True
         # Initialization
         visited = set([start])
         search_stack = []
@@ -68,7 +91,13 @@ class Graph:
         return False
 
     def dfs_recursive(self, vertex, search, visited=None):
-        """Searches for item recursively, depth first style."""
+        """Searches for item recursively, depth first style.
+            Big O is mostly same as the other dfs, but with slightly different
+            ordering due to how a stack works.
+            Mostly.
+            We need more space due to passing down the 'visited' each time. It is
+            cleaner, sure, but at what cost?
+        """
         # Init
         if visited is None:
             visited = set([vertex])
@@ -90,7 +119,10 @@ class Graph:
         return False
 
     def bfs(self, start, search):
-        """Searches for item iteratively, breadth first style."""
+        """Searches for item iteratively, breadth first style.
+            Same as dfs. Without the deque, time would take a hit due to how
+            the list inherently works, but deque() should make it constant.
+        """
         # Init; queue instead of stack
         visited = set([start])
         search_queue = deque()
@@ -111,7 +143,15 @@ class Graph:
         return False
 
     def cycle_detect(self):
-        """Checks if cycle exists."""
+        """Checks if cycle exists.
+            See above, but now we have to do it n times.
+            Time: O(n^2) max, if we have to go through every single vertex.
+                We CAN optimize it if we know specific things about what we're
+                passing in, like say, if EVERYTHING is connected.
+                However, we do not know this. Better safe than sorry.
+            Space: Same as above; we overwrite them each time we go down the for
+                loop, so there should be no issues.
+        """
         # We want to go through ALL of them, even if not connected
         for vtx in self.vertices:
             visited = set([])
