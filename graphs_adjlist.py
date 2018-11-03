@@ -126,10 +126,10 @@ class Graph:
         # Init; queue instead of stack
         visited = set([start])
         search_queue = deque()
-        search_stack.append(start)
+        search_queue.append(start)
 
         # Keep popping out from queue; prioritizes neighbors
-        while len(search_stack) > 0:
+        while len(search_queue) > 0:
             next = search_queue.popleft()
             visited.add(next)
             # End case; item found
