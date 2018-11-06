@@ -8,11 +8,11 @@ class Graph:
 
     def add_vertex(self, loc):
         """Adds a vertex.
-        Time: O(1), Theta is amount of memory a set is
+        Time: O(1), Theta is amount of memory a dict is
         """
-        self.vertices[loc] = set()
+        self.vertices[loc] = {}
 
-    def add_edge(self, src, dest):
+    def add_edge(self, src, dest, weight=0):
         """Adds an edge, unless it exists or either vertices don't exist.
         Time: O(1), it's constant. We're just adding an item into a set
         Space: O(1), it's just adding a single edge
@@ -23,7 +23,7 @@ class Graph:
         elif dest not in self.vertices:
             raise ValueError("Destination vertex not found")
         elif dest not in self.vertices[src]:
-            self.vertices[src].add(dest)
+            self.vertices[src][dest] = weight
 
     def remove_vertex(self, vertex):
         """Removes a vertex and associated adjacencies.
@@ -38,7 +38,7 @@ class Graph:
         # Remoing related adjacencies
         for item in self.vertices:
             if vertex in self.vertices[item]:
-                self.vertices[item].remove(vertex)
+                self.vertices[item].pop(vertex)
 
     def remove_edge(self, source, dest):
         """Removes an edge between source and destination vertex.
@@ -49,7 +49,7 @@ class Graph:
             raise ValueError("Source vertex not found")
         elif dest not in self.vertices[source]:
             raise ValueError("Destination vertex not found")
-        self.vertices[source].remove(dest)
+        self.vertices[source].pop(dest)
 
     def print_graph(self):
         """Prints something.
@@ -172,64 +172,14 @@ class Graph:
                             search_stack.append(adj)
         return False
 
+    def dijkstra(self):
+        """What."""
+        table = [0] + [float("inf") for i in range(len(self.vertices))]
+        print(table)
 
-# if __name__ == "__main__":
-#     g = Graph()
-#     for i in range(7):
-#         g.add_vertex(i)
-#     g.add_edge(0, 1)
-#     g.add_edge(0, 2)
-#     g.add_edge(0, 3)
-#     g.add_edge(0, 4)
-#     g.add_edge(0, 5)
-#
-#     g.add_edge(1, 2)
-#     g.add_edge(2, 0)
-#     g.add_edge(2, 3)
-#     g.add_edge(3, 3)
-#     g.add_edge(3, 4)
-#     g.add_edge(4, 5)
-#     g.print_graph()
-#
-#     print("Starting dfs")
-#     g.dfs(2, 3)
-#     print("= = = Starting recursive, should return= = = ")
-#     g.dfs_recursive(2, 3)
-#     print("= = = Continuing recursive, should be false= = = ")
-#     g.dfs_recursive(2, 6)
-#     print("= = = Starting bfs = = = ")
-#
-#     g.bfs(2, 3)
-#     print("Cycle detection")
-#     g.cycle_detect()
-#
-#     print("Let's try a different once")
-#     h = Graph()
-#     for i in range(8):
-#         h.add_vertex(i)
-#     h.add_edge(0, 1)
-#     h.add_edge(0, 2)
-#     h.add_edge(0, 3)
-#     h.add_edge(0, 4)
-#     h.add_edge(2, 4)
-#     h.add_edge(3, 4)
-#     h.add_edge(4, 5)
-#     # Should not have a cycle
-#     print(h.cycle_detect())
-#
-#     h.add_edge(6, 7)
-#     h.add_edge(7, 6)
-#
-#     # Should have a cycle
-#     print(h.cycle_detect())
+if __name__ == "__main__":
+    g = Graph()
+    for i in range(7):
+        g.add_vertex(i)
 
-
-
-
-# test.add_edge(0, 1, 1)
-# test.add_edge(1, 4, 1)
-# test.add_edge(4, 6, 1)
-# test.add_edge(3, 6, 2)
-# test.add_edge(0, 3, 2)
-# test.add_edge(3, 6, 1)
-# test.add_edge(0, 6, 4)
+    g.dijkstra()

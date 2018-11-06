@@ -9,7 +9,7 @@ class RecursionTest(unittest.TestCase):
         g.add_vertex(1)
         assert len(g.vertices) == 1
         assert 1 in g.vertices
-        assert g.vertices[1] == set([])
+        assert g.vertices[1] == {}
 
         g.add_vertex(2)
         assert len(g.vertices) == 2
@@ -18,7 +18,13 @@ class RecursionTest(unittest.TestCase):
         g.add_vertex(1)
         assert len(g.vertices) == 2
         assert 1 in g.vertices
-        assert g.vertices[1] == set([])
+        assert g.vertices[1] == {}
+
+        # Let's try non-numbers
+        g.add_vertex('A')
+        assert len(g.vertices) == 3
+        assert 'A' in g.vertices
+        assert g.vertices['A'] == {}
 
     def test_adjacency(self):
         g = Graph()
@@ -228,6 +234,17 @@ class RecursionTest(unittest.TestCase):
         # Removed 4 to 4
         g.remove_edge(4, 4)
         assert g.cycle_detect() is False
+
+    def test_dijkstra(self):
+        g = Graph()
+        for i in range(4):
+            g.add_vertex(i)
+
+        g.add_edge(0, 1, 1)
+        g.add_edge(0, 2, 2)
+        g.add_edge(1, 3, 2)
+        g.add_edge(2, 3, 2)
+
 
 if __name__ == '__main__':
     unittest.main()
