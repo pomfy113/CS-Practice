@@ -1,5 +1,5 @@
 from collections import deque
-
+import heapq
 # This is directed
 class Graph:
     def __init__(self):
@@ -172,14 +172,34 @@ class Graph:
                             search_stack.append(adj)
         return False
 
-    def dijkstra(self):
-        """What."""
-        table = [0] + [float("inf") for i in range(len(self.vertices))]
-        print(table)
+    def dijkstra(self, start, search):
+        """I can't even say his name right."""
+        # Initial item
+        # visited = set([start])
+
+        will_visit = [(0, start)]
+        # table = {i:[float("inf"), None] for i in self.vertices}
+        # table[start][0] = 0
+
+
+        while will_visit:
+            next = will_visit.pop()
+            for edge in self.vertices[next[1]]:
+                print(edge)
+                heapq.heappush(will_visit, (self.vertices[next[1]][edge], edge))
+            print(will_visit)
+
+
+        # while default != visited:
 
 if __name__ == "__main__":
     g = Graph()
-    for i in range(7):
+    for i in range(4):
         g.add_vertex(i)
 
-    g.dijkstra()
+    g.add_edge(0, 1, 5)
+    g.add_edge(0, 2, 6)
+    g.add_edge(1, 3, 5)
+    g.add_edge(2, 3, 6)
+
+    g.dijkstra(0, 3)
