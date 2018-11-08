@@ -174,20 +174,43 @@ class Graph:
 
     def dijkstra(self, start, search):
         """I can't even say his name right."""
-        # Initial item
-        # visited = set([start])
+        # Total Weight,
+        # weights = set([float(inf), vtx] for vtx in self.vertices)
+        # Weight: Vertex
 
-        will_visit = [(0, start)]
-        # table = {i:[float("inf"), None] for i in self.vertices}
-        # table[start][0] = 0
+        # visited = set([])
+        # queue = [[float('inf'), vtx] for vtx in self.vertices]
+        # heapq.heapify(queue)
+        # queue[0][0] = 0
+
+        data = {vtx: float('inf') for vtx in self.vertices}
+        queue = [[float('inf'), vtx] for vtx in self.vertices]
+        data[start] = 0
+        queue[0][0] = 0
+        visited = set()
+
+        heapq.heapify(queue)
 
 
-        while will_visit:
-            next = will_visit.pop()
-            for edge in self.vertices[next[1]]:
-                print(edge)
-                heapq.heappush(will_visit, (self.vertices[next[1]][edge], edge))
-            print(will_visit)
+        while queue:
+            cur_weight, cur_vtx = heapq.heappop(queue)
+            for edge in self.vertices[cur_vtx]:
+                print("QUEUE: ", queue)
+                print("EDGE", edge)
+                if edge in visited:
+                    continue
+                elif cur_weight < data[edge]:
+                    weight = self.vertices[cur_vtx][edge]
+                    heapq.heappush(queue, [weight, edge])
+                    visited.add(cur_vtx)
+                    data[edge] = weight
+
+        print(data)
+
+
+
+                # print(edge, self.vertices[edge])
+                # heapq.heappush(will_visit, (self.vertices[next[1]][edge], edge))
 
 
         # while default != visited:
