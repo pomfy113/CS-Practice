@@ -174,55 +174,58 @@ class Graph:
 
     def dijkstra(self, start, search):
         """I can't even say his name right."""
-        # Total Weight,
-        # weights = set([float(inf), vtx] for vtx in self.vertices)
-        # Weight: Vertex
-
-        # visited = set([])
-        # queue = [[float('inf'), vtx] for vtx in self.vertices]
-        # heapq.heapify(queue)
-        # queue[0][0] = 0
-
+        # Initializing data, along with weights, and already-visited areas
         data = {vtx: float('inf') for vtx in self.vertices}
-        queue = [[float('inf'), vtx] for vtx in self.vertices]
-        data[start] = 0
-        queue[0][0] = 0
+        queue = [[0, start]]
         visited = set()
+
+        data[start] = 0
 
         heapq.heapify(queue)
 
-
+        # We will always visit the lowest TOTAL weight due to it being a
+        # priority queue; we will only visit the most worthwhile vertices
         while queue:
             cur_weight, cur_vtx = heapq.heappop(queue)
-            for edge in self.vertices[cur_vtx]:
-                print("QUEUE: ", queue)
-                print("EDGE", edge)
-                if edge in visited:
-                    continue
-                elif cur_weight < data[edge]:
-                    weight = self.vertices[cur_vtx][edge]
-                    heapq.heappush(queue, [weight, edge])
-                    visited.add(cur_vtx)
-                    data[edge] = weight
 
-        print(data)
+            # If we haven't visited it yet...
+            if cur_vtx not in visited:
+                # Let's go through every edge it has
+                for edge in self.vertices[cur_vtx]:
+                    # Current weight it takes to vertex
+                    weight = self.vertices[cur_vtx][edge] + cur_weight
 
+                    # If weight is less, we update it
+                    if weight < data[edge]:
+                        heapq.heappush(queue, [weight, edge])
+                        data[edge] = weight
 
+            # We have now visited this location
+            visited.add(cur_vtx)
 
-                # print(edge, self.vertices[edge])
-                # heapq.heappush(will_visit, (self.vertices[next[1]][edge], edge))
+        # For double checking
+        # print(data)
+        return data[search]
 
-
-        # while default != visited:
+        def bellman_ford(self, start, search):
+            pass
 
 if __name__ == "__main__":
     g = Graph()
-    for i in range(4):
+    for i in range(7):
         g.add_vertex(i)
 
-    g.add_edge(0, 1, 5)
-    g.add_edge(0, 2, 6)
+    g.add_edge(0, 1, 4)
+    g.add_edge(0, 2, 3)
+    g.add_edge(0, 4, 7)
     g.add_edge(1, 3, 5)
-    g.add_edge(2, 3, 6)
+    g.add_edge(2, 1, 6)
+    g.add_edge(2, 3, 11)
+    g.add_edge(2, 4, 8)
+    g.add_edge(3, 5, 2)
+    g.add_edge(4, 3, 2)
+    g.add_edge(4, 6, 5)
+    g.add_edge(6, 5, 2)
+    g.add_edge(6, 3, 10)
 
-    g.dijkstra(0, 3)
+    print(g.dijkstra(0, 5))
