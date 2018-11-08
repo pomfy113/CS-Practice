@@ -204,11 +204,31 @@ class Graph:
             visited.add(cur_vtx)
 
         # For double checking
-        # print(data)
+        print(data)
         return data[search]
 
-        def bellman_ford(self, start, search):
-            pass
+    def bellman_ford(self, start, search):
+        # Made into a dictionary to accept more data
+        total = {vtx: float('inf') for vtx in self.vertices}
+        total[start] = 0
+
+        # We go through the data a "length" amount of times
+        for i in range(len(self.vertices)):
+            # For every single vtx, we should look at adjacencies
+            for vtx in total:
+                for adj in self.vertices[vtx]:
+                    # We combine what weight we know so far and update the weight...
+                    weight = total[vtx] + self.vertices[vtx][adj]
+                    # ... but only if we know it's smaller
+                    if weight < total[adj]:
+                        total[adj] = weight
+
+        # for double checking
+        print(data)
+        return total(search)
+
+
+
 
 if __name__ == "__main__":
     g = Graph()
@@ -229,3 +249,20 @@ if __name__ == "__main__":
     g.add_edge(6, 3, 10)
 
     print(g.dijkstra(0, 5))
+
+    k = Graph()
+    for i in range(6):
+        k.add_vertex(i)
+
+    k.add_edge(0, 1, 10)
+    k.add_edge(0, 5, 8)
+    k.add_edge(1, 3, 2)
+    k.add_edge(2, 1, 1)
+    k.add_edge(3, 2, -2)
+    k.add_edge(4, 1, -4)
+
+    k.add_edge(4, 3, -1)
+    k.add_edge(5, 4, 1)
+
+
+    k.bellman_ford(0, 5)
