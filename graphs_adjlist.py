@@ -1,5 +1,6 @@
 from collections import deque
 import heapq
+
 # This is directed
 class Graph:
     def __init__(self):
@@ -227,8 +228,8 @@ class Graph:
         print(data)
         return total(search)
 
-
-
+    def kruskal(self, start, search):
+        pass
 
 if __name__ == "__main__":
     g = Graph()
@@ -263,6 +264,5 @@ if __name__ == "__main__":
 
     k.add_edge(4, 3, -1)
     k.add_edge(5, 4, 1)
-
 
     k.bellman_ford(0, 5)
