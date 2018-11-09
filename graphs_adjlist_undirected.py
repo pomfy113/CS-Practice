@@ -33,29 +33,35 @@ class Graph:
         print(self.vertices)
 
 
-    def find(self, parent, vtx):
-        # End of the line
-        if parent[vtx] == None:
+    def find(self, set, vtx):
+        """Find the end of the line."""
+        # If it doesn't have children OR we loop back to the same vtx
+        if set[vtx] == None:
             return vtx
+        # Keep going down the line
         else:
-            return self.find(parent, parent[vtx])
+            return self.find(set, set[vtx])
 
     def union(self, set, x, y):
-        x_parent = self.find(set, x)
-        y_parent = self.find(set, y)
-        set[x_parent] = y_parent
+        """Creates a union."""
+        x_end = self.find(set, x)
+        y_end = self.find(set, y)
+        # End of y becomes end of x
+        set[x_end] = y_end
 
     def cycle_detect(self):
         """Checks if cycle exists."""
-        set = [None] * len(self.vertices)
+        set = {vtx: None for vtx in self.vertices}
 
+        # Let's go through every vertex and their partner
         for vtx in self.vertices:
-            for adj in self.vertices[vtx]:
-                vtx_parent = self.find(set, vtx)
-                adj_parent = self.find(set, adj)
+            for next in self.vertices[vtx]:
+                vtx_end = self.find(set, vtx)
+                next_end = self.find(set, next)
 
-                if vtx_parent != adj_parent:
-                    self.union(set, vtx_parent, adj_parent)
+                # If they don't end
+                if vtx_end != next_end:
+                    self.union(set, vtx_end, next_end)
                 else:
                     return True
 
@@ -66,10 +72,15 @@ class Graph:
 
 if __name__ == "__main__":
     g = Graph()
-    for i in range(3):
+    for i in range(7):
         g.add_vertex(i)
     g.add_edge(0, 1)
-    g.add_edge(1, 0)
-    g.add_edge(2, 1)
+    g.add_edge(1, 2)
+    g.add_edge(2, 5)
+    g.add_edge(3, 4)
+    # g.add_edge(5, 3)
+    g.add_edge(6, 2)
+
+
     g.print_graph()
     print(g.cycle_detect())
