@@ -35,6 +35,7 @@ class Graph:
 
     def find(self, set, vtx):
         """Find the end of the line."""
+
         # If it doesn't have children OR we loop back to the same vtx
         if set[vtx] == None:
             return vtx
@@ -64,7 +65,6 @@ class Graph:
                     self.union(set, vtx_end, next_end)
                 else:
                     return True
-
         return False
 
     def kruskal(self, start, search):
