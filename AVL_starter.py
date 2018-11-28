@@ -198,12 +198,12 @@ class BinarySearchTree(object):
 
         elif balance > 1:
             print(parent, child)
+            self._right_rotate(parent, child)
             print("The left is heavy", balance)
 
         return
 
     def _left_rotate(self, parent, child):
-        print("PARENT, CHILD - ", parent, child)
         new_child = child.right
         old_child = child
         # Swapping
@@ -215,8 +215,17 @@ class BinarySearchTree(object):
         else:
             parent.right = new_child
 
-    def _right_rotate(self, item):
-        pass
+    def _right_rotate(self, parent, child):
+        new_child = child.left
+        old_child = child
+        # Swapping
+        old_child.left = new_child.right
+        new_child.right = old_child
+
+        if parent is None and child is self.root:
+            self.root = new_child
+        else:
+            parent.left = new_child
 
     def _find_node_iterative(self, item):
         """Return the node containing the given item in this binary search tree,
@@ -770,7 +779,7 @@ def test_binary_search_tree():
     print(tree._find_node(1))
 
 def test_AVL_tree():
-    items = [1, 2, 3, 4, 5]
+    items = [5, 4, 3, 2, 1]
     tree = BinarySearchTree(items)
     print(tree.items_level_order())
     print(tree.items_in_order())
