@@ -131,42 +131,89 @@ class BinarySearchTree(object):
             self.root = BinaryTreeNode(item)
             self.size += 1
             return
-        print("\nINSERTING - ", item)
-        self._insert_helper(self.root, item)
+        print("CURRENT:", self.items_level_order())
+        self._insert_helper(item)
         self.size += 1
+        print("NEW", self.items_level_order())
 
+        print("DONE\n\n\n")
         pass
 
-    def _insert_helper(self, node, item):
-        if item < node.data: # Left child
+    def _insert_helper(self, item, node=None):
+        # Init
+        print(node)
+        if node is None:
+            child = self._insert_helper(item, self.root)
+            if child is not None:
+                self._balance(node, child)
+
+        elif item < node.data: # Left child
             if node.left is None:
                 node.left = BinaryTreeNode(item)
                 return node
             else:
-                child = self._insert_helper(node.left, item)
-                print("PARENT", node, "CHILD", child)
-                self._balance(node)
+                child = self._insert_helper(item, node.left)
+                if child is not None:
+                    self._balance(node, child)
                 return node
 
         elif item > node.data: # Right child
             if node.right is None:
                 node.right = BinaryTreeNode(item)
+                print("INSERTING", item)
                 return node
             else:
-                child = self._insert_helper(node.right, item)
-                print("PARENT", node, "CHILD", child)
-                self._balance(node)
+                child = self._insert_helper(item, node.right)
+                if child is not None:
+                    self._balance(node, child)
                 return node
         else:
             return
 
-    def _balance(self, node):
+    def _balance(self, parent, child):
+        print("============\nBALANCING CHECK!\n============")
+        left_height = -1
+        right_height = -1
+
+        # Check the parent's balance
+        if child.left:
+            left_height = child.left.height()
+        if child.right:
+            right_height = child.right.height()
+        balance = left_height - right_height
+        print(parent, child)
+        print(left_height, right_height)
+        print("BALANCE:", balance)
+
+
+        if balance < -1:
+            print("- - - BALANCING IN PROGRESS - - -")
+            print(parent, child)
+            print(left_height, right_height, child.right)
+            print("The right is heavy", balance)
+            print("CURRENT SETUP:", self.items_level_order())
+            self._left_rotate(parent, child)
+
+            print("NEW SETUP:", self.items_level_order())
+
+        elif balance > 1:
+            print(parent, child)
+            print("The left is heavy", balance)
+
         return
 
-    def _left_rotate(self, item):
-        # new_left = item
-        # new_parent =
-        pass
+    def _left_rotate(self, parent, child):
+        print("PARENT, CHILD - ", parent, child)
+        new_child = child.right
+        old_child = child
+        # Swapping
+        old_child.right = new_child.left
+        new_child.left = old_child
+
+        if parent is None and child is self.root:
+            self.root = new_child
+        else:
+            parent.right = new_child
 
     def _right_rotate(self, item):
         pass
@@ -529,6 +576,7 @@ class BinarySearchTree(object):
         while len(queue) > 0:
             # Dequeue node at front of queue
             node = queue.popleft()
+            print(node, node.left, node.right)
             # Visit this node's data with given function
             visit(node.data)
             # Enqueue this node's left child, if it exists
@@ -722,7 +770,7 @@ def test_binary_search_tree():
     print(tree._find_node(1))
 
 def test_AVL_tree():
-    items = [8, 4, 12, 2, 6, 10, 14, 1, 3, 5, 7, 9, 11, 13, 15]
+    items = [1, 2, 3, 4, 5]
     tree = BinarySearchTree(items)
     print(tree.items_level_order())
     print(tree.items_in_order())
