@@ -71,7 +71,7 @@ class BinarySearchTree(object):
         self.size = 0
         if items is not None:
             for item in items:
-                self.insert(item)
+                self.insert_new(item)
 
     def __repr__(self):
         """Return a string representation of this binary search tree."""
@@ -106,9 +106,8 @@ class BinarySearchTree(object):
         return node.data if node else None
 
     def insert(self, item):
-        """Insert the given item in order into this binary search tree.
-        If it's empty, well, it's 1
-        Otherwise, log(n); we know where we're heading"""
+        """Insert the given item in order into this binary search tree. If it's empty,
+        well, it's 1. Otherwise, log(n); we know where we're heading."""
         # Handle the case where the tree is empty
         if self.is_empty():
             # Create a new root node
@@ -126,6 +125,51 @@ class BinarySearchTree(object):
             parent.right = BinaryTreeNode(item)
 
         self.size += 1
+
+    def insert_new(self, item):
+        if self.is_empty():
+            self.root = BinaryTreeNode(item)
+            self.size += 1
+            return
+        print("\nINSERTING - ", item)
+        self._insert_helper(self.root, item)
+        self.size += 1
+
+        pass
+
+    def _insert_helper(self, node, item):
+        if item < node.data: # Left child
+            if node.left is None:
+                node.left = BinaryTreeNode(item)
+                return node
+            else:
+                child = self._insert_helper(node.left, item)
+                print("PARENT", node, "CHILD", child)
+                self._balance(node)
+                return node
+
+        elif item > node.data: # Right child
+            if node.right is None:
+                node.right = BinaryTreeNode(item)
+                return node
+            else:
+                child = self._insert_helper(node.right, item)
+                print("PARENT", node, "CHILD", child)
+                self._balance(node)
+                return node
+        else:
+            return
+
+    def _balance(self, node):
+        return
+
+    def _left_rotate(self, item):
+        # new_left = item
+        # new_parent =
+        pass
+
+    def _right_rotate(self, item):
+        pass
 
     def _find_node_iterative(self, item):
         """Return the node containing the given item in this binary search tree,
@@ -173,7 +217,6 @@ class BinarySearchTree(object):
             return self._find_node(item, node.left)
         # Check if the given item is greater than the node's data
         elif item > node.data and node.right is not None:
-
             # Descend to the node's right child
             return self._find_node(item, node.right)
 
@@ -206,6 +249,7 @@ class BinarySearchTree(object):
                 node = node.right
         # Not found
         return parent
+
     def _find_parent_node(self, item, node=None, parent=None):
         """Recursive version.
 
@@ -657,7 +701,6 @@ def test_binary_search_tree():
     testtree.delete(1)
     print(testtree.items_level_order())
     # Deleting root
-    print("\n\nPROBLEM HERE?")
     testtree.delete(3)
     print(testtree.items_level_order())
 
@@ -671,8 +714,20 @@ def test_binary_search_tree():
     tree.delete(7)
     print(tree.items_level_order())
 
+    items = [8, 4, 12, 2, 6, 10, 14, 1, 3, 5, 7, 9, 11, 13, 15]
+    tree = BinarySearchTree(items)
+    print(tree._find_node(8))
+    print(tree._find_node(4))
+    print(tree._find_node(2))
+    print(tree._find_node(1))
 
-    print(tree)
+def test_AVL_tree():
+    items = [8, 4, 12, 2, 6, 10, 14, 1, 3, 5, 7, 9, 11, 13, 15]
+    tree = BinarySearchTree(items)
+    print(tree.items_level_order())
+    print(tree.items_in_order())
+
 
 if __name__ == '__main__':
-    test_binary_search_tree()
+    # test_binary_search_tree()
+    test_AVL_tree()
