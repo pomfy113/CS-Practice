@@ -170,7 +170,7 @@ class BinarySearchTree(object):
         else:
             return
 
-    def _check_balance(self, parent, child):
+    def _check_balance(self, parent):
         left_height = -1
         right_height = -1
         if parent and parent.left:
@@ -180,53 +180,45 @@ class BinarySearchTree(object):
         return left_height - right_height
 
     def _balance(self, parent, child):
+        # Initial balance check
         balance = self._check_balance(parent, child)
 
         if balance < -1:
-            # check for additional rotate
+            # If the child's left tree is a bit heavy we should rotate that right first
             if self._check_balance(child, child.left) >= 1:
-                new_child = self._right_rotate(child, child.left)
-                parent.right = new_child
-                child = new_child
-                print(self.items_level_order())
-
-
+                child = self._right_rotate(child)
+                parent.right = child
+            # If not a root, we can rotate our nodes left
             if parent is not self.root:
                 grandparent = self._find_parent_node(parent.data)
                 grandparent.right = self._left_rotate(parent, child)
-
+            # If root, instead of a grandparent, the root is whatever results we get
             else:
-                print("NON-ROOT", self.items_level_order())
-                print(parent, parent.right, child, child.right)
                 self.root = self._left_rotate(parent, child)
 
-                print(self.items_level_order())
-
-
         elif balance > 1:
-            print("Let's not touch this for a bit")
+            # Same as above, but we see if right is heavy
+            if self._check_balance(child, child.right) <= 1:
+                child = self._left_rotate(child)
+                parent.left = child
+            # If not root, rotate right
             if parent is not self.root:
-                parent.right = self._right_rotate(parent, child)
-            elif parent and child is parent.right:
+                grandparent = self._find_parent_node(parent.data)
+                grandparent.right = self._right_rotate(parent, child)
+            # Else, root is now our resulting rotation
+            else:
                 self.root = self._right_rotate(parent, child)
         return
 
     def _left_rotate(self, parent, child):
         parent.right = child.left
         child.left = parent
-
-
         return child
 
-
     def _right_rotate(self, parent, child):
-        print(parent)
-
         parent.left = child.right
         child.right = parent
-        print("IN ROTATE", self.items_level_order())
-        print(parent, parent.left, parent.right)
-        print(child, child.left, child.right)
+
         return child
 
     def _find_node_iterative(self, item):
@@ -784,8 +776,13 @@ def test_AVL_tree():
     # tree = BinarySearchTree(items)
     # print(tree.items_level_order())
     # print(tree.items_in_order())
+    #
+    # items = [1, 4, 2, 3, 5]
+    # tree = BinarySearchTree(items)
+    # print(tree.items_level_order())
+    # print(tree.items_in_order())
 
-    items = [1, 4, 2, 3, 5]
+    items = [4, 2, 3, 1]
     tree = BinarySearchTree(items)
     print(tree.items_level_order())
     print(tree.items_in_order())
