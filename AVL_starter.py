@@ -170,63 +170,64 @@ class BinarySearchTree(object):
         else:
             return
 
-    def _balance(self, parent, child):
-        print("============\nBALANCING CHECK!\n============")
+    def _check_balance(self, parent, child):
         left_height = -1
         right_height = -1
+        if parent and parent.left:
+            left_height = parent.left.height()
+        if parent and parent.right:
+            right_height = parent.right.height()
+        return left_height - right_height
 
-        # Check the parent's balance
-        if child.left:
-            left_height = child.left.height()
-        if child.right:
-            right_height = child.right.height()
-        balance = left_height - right_height
-        print(balance, parent, child)
+    def _balance(self, parent, child):
+        balance = self._check_balance(parent, child)
 
         if balance < -1:
-            # if self._balance(self, parent )
-            self.root = self._left_rotate(parent, child)
-            self._right_rotate(child, child.right)
-            parent.left = self._left_rotate(parent, child)
-            if parent and child is parent.right:
-                parent.right = self._left_rotate(parent, child)
-            elif child is self.root:
+            # check for additional rotate
+            if self._check_balance(child, child.left) >= 1:
+                new_child = self._right_rotate(child, child.left)
+                parent.right = new_child
+                child = new_child
+                print(self.items_level_order())
+
+
+            if parent is not self.root:
+                grandparent = self._find_parent_node(parent.data)
+                grandparent.right = self._left_rotate(parent, child)
+
+            else:
+                print("NON-ROOT", self.items_level_order())
+                print(parent, parent.right, child, child.right)
                 self.root = self._left_rotate(parent, child)
 
+                print(self.items_level_order())
+
+
         elif balance > 1:
-            print(self.items_level_order())
-            if parent and child is parent.left:
+            print("Let's not touch this for a bit")
+            if parent is not self.root:
                 parent.right = self._right_rotate(parent, child)
             elif parent and child is parent.right:
                 self.root = self._right_rotate(parent, child)
-            else:
-                parent.left = self._right_rotate(parent, child)
-            # self._right_rotate(parent, child)
-            print(self.items_level_order())
-
-            # else:
-            #     self._left_rotate(child, child.right)
-
         return
 
     def _left_rotate(self, parent, child):
-        new_child = child.right
-        old_child = child
-        # Swapping
-        old_child.right = new_child.left
-        new_child.left = old_child
+        parent.right = child.left
+        child.left = parent
 
-        return new_child
+
+        return child
 
 
     def _right_rotate(self, parent, child):
-        print("ROTATING", parent, child)
-        new_child = child.left
-        old_child = child
-        # Swapping
-        old_child.left = new_child.right
-        new_child.right = old_child
-        return new_child
+        print(parent)
+
+        parent.left = child.right
+        child.right = parent
+        print("IN ROTATE", self.items_level_order())
+        print(parent, parent.left, parent.right)
+        print(child, child.left, child.right)
+        return child
 
     def _find_node_iterative(self, item):
         """Return the node containing the given item in this binary search tree,
@@ -784,14 +785,14 @@ def test_AVL_tree():
     # print(tree.items_level_order())
     # print(tree.items_in_order())
 
-    # items = [1, 4, 2, 3]
-    # tree = BinarySearchTree(items)
-    # print(tree.items_level_order())
-    # print(tree.items_in_order())
-    items = [1, 2, 3, 4, 5]
+    items = [1, 4, 2, 3]
     tree = BinarySearchTree(items)
     print(tree.items_level_order())
     print(tree.items_in_order())
+    # items = [1, 2, 3, 4, 5]
+    # tree = BinarySearchTree(items)
+    # print(tree.items_level_order())
+    # print(tree.items_in_order())
 
 
 if __name__ == '__main__':
