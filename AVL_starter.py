@@ -785,11 +785,12 @@ def test_AVL_tree():
     # print(tree.items_level_order())
     # print(tree.items_in_order())
 
-    items = [1, 4, 2, 3]
+    items = [1, 4, 2, 3, 5]
     tree = BinarySearchTree(items)
     print(tree.items_level_order())
     print(tree.items_in_order())
-    # items = [1, 2, 3, 4, 5]
+
+    # items = [1, 2, 3, 4, 5, 6, 7]
     # tree = BinarySearchTree(items)
     # print(tree.items_level_order())
     # print(tree.items_in_order())
