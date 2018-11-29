@@ -184,19 +184,25 @@ class BinarySearchTree(object):
         print(balance, parent, child)
 
         if balance < -1:
+            # if self._balance(self, parent )
+            self.root = self._left_rotate(parent, child)
+            self._right_rotate(child, child.right)
+            parent.left = self._left_rotate(parent, child)
             if parent and child is parent.right:
-                print("* * * * * * We shouldn't be here! * * * * * *")
-                self._left_rotate(parent, child)
-            else:
-                self._right_rotate(child, child.right)
-                self._left_rotate(parent, child)
-                print(self.items_level_order())
+                parent.right = self._left_rotate(parent, child)
+            elif child is self.root:
+                self.root = self._left_rotate(parent, child)
 
         elif balance > 1:
             print(self.items_level_order())
-            if parent is None or child is parent.left:
-                self._right_rotate(parent, child)
-                print(self.items_level_order())
+            if parent and child is parent.left:
+                parent.right = self._right_rotate(parent, child)
+            elif parent and child is parent.right:
+                self.root = self._right_rotate(parent, child)
+            else:
+                parent.left = self._right_rotate(parent, child)
+            # self._right_rotate(parent, child)
+            print(self.items_level_order())
 
             # else:
             #     self._left_rotate(child, child.right)
@@ -210,10 +216,8 @@ class BinarySearchTree(object):
         old_child.right = new_child.left
         new_child.left = old_child
 
-        if parent is None and child is self.root:
-            self.root = new_child
-        else:
-            parent.left = new_child
+        return new_child
+
 
     def _right_rotate(self, parent, child):
         print("ROTATING", parent, child)
@@ -222,12 +226,7 @@ class BinarySearchTree(object):
         # Swapping
         old_child.left = new_child.right
         new_child.right = old_child
-
-        if parent is None and child is self.root:
-            self.root = new_child
-        else:
-            parent.right = new_child
-
+        return new_child
 
     def _find_node_iterative(self, item):
         """Return the node containing the given item in this binary search tree,
@@ -780,16 +779,19 @@ def test_binary_search_tree():
     print(tree._find_node(1))
 
 def test_AVL_tree():
-    items = [5, 4, 3, 2, 1]
-    tree = BinarySearchTree(items)
-    print(tree.items_level_order())
-    print(tree.items_in_order())
+    # items = [5, 4, 3, 2, 1]
+    # tree = BinarySearchTree(items)
+    # print(tree.items_level_order())
+    # print(tree.items_in_order())
 
     # items = [1, 4, 2, 3]
     # tree = BinarySearchTree(items)
     # print(tree.items_level_order())
     # print(tree.items_in_order())
-
+    items = [1, 2, 3, 4, 5]
+    tree = BinarySearchTree(items)
+    print(tree.items_level_order())
+    print(tree.items_in_order())
 
 
 if __name__ == '__main__':
