@@ -36,6 +36,48 @@ def insertion(data):
         new_item = data.pop(index)
         data.insert(i, new_item)
 
+def merge(data):
+    helper = data[:] # Using this for buffer
+    merge_helper(data, helper, 0, len(data))
+
+def merge_helper(input, output, left, right):
+    # We have to swap input/output to change what's being used as a buffer
+    length = len(input)
+    if right - left < 2:
+        return
+    else:
+        partition = (left + right) // 2
+        merge_helper(output, input, left, partition)
+        merge_helper(output, input, partition, right)
+        merge_combine(input, output, left, partition, right)
+
+def merge_combine(data, helper, left, partition, right):
+    left_buffer = 0
+    right_buffer = 0
+    
+    for i in range(left, right):
+        left_total = left + left_buffer
+        right_total = partition + right_buffer
+
+        if right_total == right:
+            # Check if we only have the left items remaining
+            data[i] = helper[left_total]
+            left_buffer += 1
+        elif left_total == partition:
+            # Check if we only have the right items remaining
+            data[i] = helper[right_total]
+            right_buffer += 1
+        elif helper[left_total] < helper[right_total]:
+            # Add the smaller left object
+            data[i] = helper[left_total]
+            left_buffer += 1
+        elif helper[left_total] > helper[right_total]:
+            # Add the smaller right object
+            data[i] = helper[right_total]
+            right_buffer += 1
+
+
+
 def sorting_test(sort_type):
     data1 = [5, 4, 2, 1, 3]
     globals()[sort_type](data1)
