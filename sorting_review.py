@@ -76,13 +76,33 @@ def merge_combine(data, helper, left, partition, right):
             data[i] = helper[right_total]
             right_buffer += 1
 
+def radix(data):
+    pass
 
+def quick(data):
+    quick_helper(data, 0, len(data))
 
+def quick_helper(data, left, right):
+    if left < right:
+        # Keeping track of where to put in new data
+        index = left
+
+        for i in range(left+1, right):
+            if data[index] > data[i]:
+                data[index], data[i] = data[i], data[index]
+                index += 1
+
+        quick_helper(data, left, index)
+        quick_helper(data, index+1, right)
 
 def sorting_test(sort_type):
-    data1 = [5, 4, 2, 1, 3, 5]
-    globals()[sort_type](data1)
-    print(data1)
+    if sort_type == radix:
+        dataRad = [111, 101, 121, 415, 612, 135, 213]
+        globals()[sort_type](data2)
+    else:
+        data1 = [5, 4, 2, 1, 3, 5]
+        globals()[sort_type](data1)
+        print(data1)
 
 if __name__ == '__main__':
     import sys
