@@ -54,7 +54,7 @@ def merge_helper(input, output, left, right):
 def merge_combine(data, helper, left, partition, right):
     left_buffer = 0
     right_buffer = 0
-    
+
     for i in range(left, right):
         left_total = left + left_buffer
         right_total = partition + right_buffer
@@ -67,7 +67,7 @@ def merge_combine(data, helper, left, partition, right):
             # Check if we only have the right items remaining
             data[i] = helper[right_total]
             right_buffer += 1
-        elif helper[left_total] < helper[right_total]:
+        elif helper[left_total] <= helper[right_total]:
             # Add the smaller left object
             data[i] = helper[left_total]
             left_buffer += 1
@@ -78,8 +78,9 @@ def merge_combine(data, helper, left, partition, right):
 
 
 
+
 def sorting_test(sort_type):
-    data1 = [5, 4, 2, 1, 3]
+    data1 = [5, 4, 2, 1, 3, 5]
     globals()[sort_type](data1)
     print(data1)
 
