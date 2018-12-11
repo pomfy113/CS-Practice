@@ -8,11 +8,11 @@ class Node:
 
 class LinkedList:
     def __init__(self):
-        self.root = None
+        self.head = None
         self.tail = None
 
     def __repr__(self):
-        node = self.root
+        node = self.head
         list = ""
         while node is not None:
             list += " {} ".format(node)
@@ -23,13 +23,25 @@ class LinkedList:
     def add(self, num):
         node = Node(num)
 
-        if self.root is None:
-            self.root = node
+        if self.head is None:
+            self.head = node
             self.tail = node
         else:
             self.tail.next = node
             self.tail = node
 
+    def reverse(self):
+        curr = self.head
+        prev = None
+        self.tail = curr
+
+        while curr is not None:
+            next = curr.next
+            curr.next = prev
+            prev = curr
+            curr = next
+
+        self.head = prev
 
 
 LL = LinkedList()
@@ -38,3 +50,6 @@ for i in range(7):
     LL.add(i)
 
 print(LL)
+LL.reverse()
+print(LL)
+print(LL.head, LL.tail)
