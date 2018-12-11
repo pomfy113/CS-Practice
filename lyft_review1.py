@@ -1,3 +1,5 @@
+"""Going to go with basic linked list stuff here."""
+
 class Node:
     def __init__(self, number):
         self.data = number
