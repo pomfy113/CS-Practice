@@ -33,21 +33,20 @@ class LinkedList:
             self.tail = node
 
     def reverse(self):
-        curr = self.head
+        node = self.head
         prev = None
-        self.tail = curr
+        self.tail = node
 
-        while curr is not None:
-            next = curr.next
-            curr.next = prev
-            prev = curr
-            curr = next
+        while node is not None:
+            next = node.next
+            node.next = prev
+            prev = node
+            node = next
 
         self.head = prev
 
     def rotate(self, rotate):
         node = self.head
-        prev = None
 
         for _ in range(rotate):
             prev = node
@@ -56,16 +55,15 @@ class LinkedList:
         # Unchain
         prev.next = None
         self.tail = prev
-
-        # Keep track of future head
         future_head = node
 
         while node.next is not None:
             node = node.next
 
-        # Reassignment
+        # Reattachment
         node.next = self.head
         self.head = future_head
+
 
 LL = LinkedList()
 
@@ -75,12 +73,13 @@ for i in range(7):
 print(LL)
 print("\n\n")
 
+print("Reverse")
 LL.reverse()
 print(LL)
-print(LL.head, LL.tail)
 LL.reverse()
 print("\n\n")
 
+print("Rotating")
 LL.rotate(3)
 print(LL)
 print("\n\n")
