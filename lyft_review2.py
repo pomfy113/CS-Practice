@@ -46,3 +46,16 @@ print("\n\n")
 fill(array, 0, 1)
 for i in array:
     print(i)
+
+print("\n\n")
+array = [
+[1, 0, 0, 1, 0],
+[0, 1, 0, 1, 0],
+[0, 1, 0, 1, 0],
+[0, 1, 0, 0, 0],
+[0, 1, 1, 0, 1]
+]
+
+fill(array, 1, 0)
+for i in array:
+    print(i)
