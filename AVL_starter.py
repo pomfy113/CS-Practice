@@ -198,13 +198,13 @@ class BinarySearchTree(object):
 
         elif balance > 1:
             # Same as above, but we see if right is heavy
-            if self._check_balance(child) <= 1:
+            if self._check_balance(child) <= -1:
                 child = self._left_rotate(child, child.right)
                 parent.left = child
             # If not root, rotate right
             if parent is not self.root:
                 grandparent = self._find_parent_node(parent.data)
-                grandparent.right = self._right_rotate(parent, child)
+                grandparent.left = self._right_rotate(parent, child)
             # Else, root is now our resulting rotation
             else:
                 self.root = self._right_rotate(parent, child)
