@@ -18,8 +18,8 @@ def digit(data):
     return digits
 
 def radix(data):
+    # Doesn't handle negatives yet
     digits = digit(data)
-    copy = data[:]
     buckets = [[] for _ in range(10)]
 
     # Go through amount of digits
@@ -35,9 +35,6 @@ def radix(data):
         for bucket in buckets:
             data.extend(bucket)
             bucket.clear()
-
-        print("\n")
-    print(data)
 
 
 data = [0, 501, 10, 100, 121, 500, 1000]
