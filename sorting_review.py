@@ -19,22 +19,24 @@ def selection(data):
         data[i], data[min] = data[min], data[i]
 
 def insertion(data):
-    """Keep moving data down the line and inserting them in appropriate index."""
+    """Keep moving data down the line and inserting them in appropriate index.
+    NOTE: Really useful for almost sorted
+    """
     length = len(data)
+    print(data)
+    for i in range(1, length):
+        key = data[i]
+        index = i - 1
 
-    for i in range(length):
-        index = i
-        for j in range(length - 1, i, -1):
-            # Option 1: swap
-            # if data[i] > data[j]:
-            #     data[i], data[j] = data[j], data[i]
+        while index >= 0 and key < data[index]:
+            print("Thing")
+            # Move what's on index up
+            data[index+1] = data[index]
+            # Move left
+            index -= 1
 
-            # Option 2: keep track of index
-            if data[index] > data[j]:
-                index = j
-
-        new_item = data.pop(index)
-        data.insert(i, new_item)
+        # Place item in front of first number lower than it
+        data[index+1] = key
 
 def merge(data):
     helper = data[:] # Using this for buffer
@@ -100,7 +102,8 @@ def sorting_test(sort_type):
         dataRad = [111, 101, 121, 415, 612, 135, 213]
         globals()[sort_type](data2)
     else:
-        data1 = [5, 4, 2, 1, 3, 5]
+        # data_random = [5, 4, 2, 1, 3, 5]
+        # data_sorted = [1, 2, 3, 4, 3]
         globals()[sort_type](data1)
         print(data1)
 
