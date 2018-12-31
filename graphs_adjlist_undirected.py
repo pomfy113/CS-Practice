@@ -76,10 +76,8 @@ class Graph:
 
         heapq.heapify(queue)
 
-
         while queue:
             weight, vtx = heapq.heappop(queue)
-            print(data)
             if vtx not in visited:
                 visited.add(vtx)
 
@@ -89,7 +87,7 @@ class Graph:
                         heapq.heappush(queue, (adj_weight, adj))
                         if data[adj] > adj_weight:
                             data[adj] = adj_weight
-        pass
+        return data
 
 if __name__ == "__main__":
     # g = Graph()
