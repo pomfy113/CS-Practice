@@ -225,10 +225,39 @@ class Graph:
                         total[adj] = weight
 
         # for double checking
-        print(data)
-        return total(search)
+        return total[search]
 
-    def kruskal(self, start, search):
+
+    def prims(self):
+        data = {vtx: float('inf') for vtx in self.vertices}
+        data[0] = 0
+        queue = [(0, 0)]
+        visited = set()
+
+        heapq.heapify(queue)
+
+        print(self.vertices)
+
+
+        while queue:
+            print(data)
+            print("QUEUE: {}".format(queue))
+
+            weight, vtx = heapq.heappop(queue)
+            print("Popped vtx {}, weight {}\n".format(vtx, weight))
+
+            if vtx not in visited:
+                visited.add(vtx)
+                data[vtx] = weight
+
+                for adj in self.vertices[vtx]:
+                    adj_weight = self.vertices[vtx][adj]
+
+                    heapq.heappush(queue, (adj_weight, adj))
+
+
+
+        print(data)
         pass
 
 if __name__ == "__main__":
@@ -249,7 +278,7 @@ if __name__ == "__main__":
     g.add_edge(6, 5, 2)
     g.add_edge(6, 3, 10)
 
-    print(g.dijkstra(0, 5))
+    # print(g.dijkstra(0, 5))
 
     k = Graph()
     for i in range(6):
@@ -266,3 +295,35 @@ if __name__ == "__main__":
     k.add_edge(5, 4, 1)
 
     k.bellman_ford(0, 5)
+# =========
+    h = Graph()
+    for i in range(4):
+        h.add_vertex(i)
+    h.add_edge(0, 1, 10)
+    h.add_edge(0, 2, 6)
+    h.add_edge(0, 3, 5)
+    h.add_edge(1, 3, 15)
+    h.add_edge(2, 3, 4)
+    h.prims()
+
+
+    n = Graph()
+    for i in range(9):
+        n.add_vertex(i)
+
+    n.add_edge(0, 1, 4)
+    n.add_edge(0, 7, 8)
+    n.add_edge(1, 7, 11)
+    n.add_edge(1, 2, 8)
+    n.add_edge(7, 8, 7)
+    n.add_edge(7, 6, 1)
+    n.add_edge(2, 8, 2)
+    n.add_edge(2, 3, 7)
+    n.add_edge(2, 5, 4)
+    n.add_edge(8, 6, 6)
+    n.add_edge(6, 5, 2)
+    n.add_edge(3, 5, 14)
+    n.add_edge(3, 4, 9)
+    n.add_edge(5, 4, 10)
+
+    # n.prims()
