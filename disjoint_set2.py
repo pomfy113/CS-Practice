@@ -21,6 +21,7 @@ def test_cyclic(edges):
             return True
 
     for vtx, edge in edges:
+        # Not union? Then we have a cycle
         if not union(vtx, edge):
             return [vtx, edge]
 

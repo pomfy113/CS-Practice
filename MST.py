@@ -48,18 +48,22 @@ def kruskal(data):
             else:
                 return find_parent(parents[node])
 
-        def union(node1, node2):
+        def cycle(node1, node2):
+            # Create union
             node1_parent = find_parent(node1)
             node2_parent = find_parent(node2)
+
+            # Same parent? Cycle
             if node1_parent == node2_parent:
-                return False
-            else:
-                parents[node1_parent] = node2_parent
                 return True
+            else:
+                # Union!
+                parents[node1_parent] = node2_parent
+                return False
 
         for _, vtx, adj in MST_copy:
             # If we find a cycle, stop
-            if not union(vtx, adj):
+            if cycle(vtx, adj):
                 return True
 
         return False
@@ -85,7 +89,6 @@ def kruskal(data):
         if cycle_detect(MST, next) is False:
             MST.append(next)
 
-    # Formatting this for now
     print(MST)
 
 data = [
