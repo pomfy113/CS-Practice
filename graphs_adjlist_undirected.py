@@ -134,4 +134,4 @@ if __name__ == "__main__":
     n.add_edge(3, 4, 9)
     n.add_edge(5, 4, 10)
 
-    n.prims()
+    print(n.prims())
